@@ -36,8 +36,8 @@ def load(bounding_box_folder = "Pedestrian/groundTruth"):
             filename = bounding_box_folder +"/"+file
             for line in open(filename).readlines():
                 l = line.split()
-                left, top, width, height = [int(float(l[i])) for i in range(0,4)]
-                bounding_boxes.append(bbox_utils.BoundingBox(top, left, height, width, confidence = None))
+                left, top, width, height, confidence = [int(float(l[i])) for i in range(0,5)]
+                bounding_boxes.append(bbox_utils.BoundingBox(top, left, height, width, confidence))
             bbbox_lists_dict[os.path.splitext(file)[0]] = bounding_boxes
     return bbbox_lists_dict, img_file_dict
 
