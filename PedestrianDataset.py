@@ -13,8 +13,7 @@ def load(bounding_box_folder = "Pedestrian/groundTruth"):
     bbbox_lists_dict = {}
 
     for file in os.listdir(img_folder):
-        image_filenames.append(file)
-        img_file_dict[os.path.splitext(file)[0]] = file
+        img_file_dict[os.path.splitext(file)[0]] = img_folder +"/"+ file
     
     if bounding_box_folder == "Pedestrian/groundTruth":
         for file in os.listdir(bounding_box_folder):
