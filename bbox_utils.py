@@ -47,6 +47,7 @@ class BoundingBox(object):
     def ellipse_score(self, other, allowed_ellipse_size = 0.25):
         """
         Return 'True' if the center of 'other' is within a
+        certain ellipse.
         """
         self_center_x = float(self.left + 0.5*self.width)
         self_center_y = float(self.top + 0.5*self.height)
