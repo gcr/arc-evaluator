@@ -1,2 +1,0 @@
-% bbGt version=3
-person-fa 354 182 10 21 0 0 0 0 0 0 0
