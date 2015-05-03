@@ -1,4 +1,30 @@
 #!/usr/bin/env python
+import skimage
+from skimage import io
+def plot_bounding_box(filename, bbox_list, colorvector):
+    """
+    Input
+        filename of image as string
+        bbox_list as list of BoundingBox objects
+        colovector as 3x1 np.array defining the color channels normalized to [0-1]
+
+    Output 
+        image as np.array of shape (height, width, channels) 
+    """
+    line_width = 4
+    #load image file
+    image = skimage.img_as_float(io.imread(filename))
+    for bbox in bbox_list:
+        top = bbox.top
+        left = bbox.left
+        width = bbox.width
+        height = bbox.height
+        image[top:top+height, left-line_width/2:left+line_width/2, :] = colorvector
+        image[top:top+height, left+width-line_width/2:left+width+line_width/2, :] = colorvector
+        image[top-line_width/2:top+line_width/2, left:left+width, :] = colorvector
+        image[top+height-line_width/2:top+height+line_width/2, left:left+width, :] = colorvector
+    return image
+
 
 class BoundingBox(object):
     def __init__(self, top, left, height, width, confidence = None):
