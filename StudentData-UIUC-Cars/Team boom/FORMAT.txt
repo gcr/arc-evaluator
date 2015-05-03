@@ -1,0 +1,13 @@
+This archive contains the results from the last run of the HPU.
+
+The ground truth is stored in car_dataset.txt (The results for this was uploaded earlier by yash and ankit - CPU_results_SVHN_UIUC.rtf on Slack)
+Every other text file contains the results from the HPU with a fixed number of images per frame (1.txt has the results for the HPU with 1 image per frame).
+
+Each line in each file is structured as follows:
+<Image_no> [x1,y1,w1,h1] [x2,y2,w2,h2] [x3,y3,w3,h3] <time>
+
+<Image_no>: This is the number identifying the image in the dataset. These results are for the multi-scale dataset for the UIUC car dataset which contains 108 images (0 to 107).
+
+[x1,y1,w1,h1]: Array containing the x, y coordinates, width and height of the bounding box. There are multiple arrays, one for each bounding box.
+
+<time>: The total time taken for the entire image in seconds.
