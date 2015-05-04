@@ -8,8 +8,8 @@ def plot_bounding_box(filename, bbox_list, colorvector):
         bbox_list as list of BoundingBox objects
         colovector as 3x1 np.array defining the color channels normalized to [0-1]
 
-    Output 
-        image as np.array of shape (height, width, channels) 
+    Output
+        image as np.array of shape (height, width, channels)
     """
     line_width = 4
     #load image file
@@ -68,7 +68,10 @@ class BoundingBox(object):
         else:
             intersection_area = 0
         union_area = self.area + other.area - intersection_area
-        return float(intersection_area) / float(union_area)
+        if union_area > 0:
+            return float(intersection_area) / float(union_area)
+        else:
+            return 0
 
     def ellipse_score(self, other, allowed_ellipse_size = 0.25):
         """
