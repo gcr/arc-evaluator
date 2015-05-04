@@ -60,14 +60,18 @@ def maximum_F_score(groundtruth, eval_boxes, match_mode="ellipse"):
         matcher = lambda gt,other: gt.ellipse_matches(other)
     elif match_mode=="iou":
         matcher = lambda gt,other: gt.iou_score(other) >= 0.5
-
     all_confidences = {box.confidence
                        for boxes in eval_boxes.values()
                        for box in boxes}
-    return max([
-        F1_score(**calc_TP_FP(groundtruth, eval_boxes, matcher, confidence))
-        for confidence in all_confidences
-    ])
+    if len(all_confidences) > 50:
+        all_confidences = set(np.random.choice(list(all_confidences), 50, replace=False))
+    if all_confidences:
+        return max([
+            F1_score(**calc_TP_FP(groundtruth, eval_boxes, matcher, confidence))
+            for confidence in all_confidences
+        ])
+    else:
+        return 0
 
 def precision(TP, FP, TN, FN):
     if TP>0:
@@ -75,7 +79,9 @@ def precision(TP, FP, TN, FN):
     return 0.0
 
 def recall(TP, FP, TN, FN):
-    return float(TP) / (float(TP + FN))
+    if TP+FN>0:
+        return float(TP) / (float(TP + FN))
+    return 0.0
 
 def F1_score(TP, FP, TN, FN):
     p = precision(TP, FP, TN, FN)
@@ -132,7 +138,7 @@ def make_accuracy_plot(ax,
         ]
         mean_accs.append(np.mean(accuracies))
         stderr_accs.append(np.std(accuracies, ddof=1) / np.sqrt(N))
-        print mix_fraction, np.mean(accuracies)
+        #print mix_fraction, np.mean(accuracies)
     ax.errorbar(mix_fractions, mean_accs, stderr_accs, label=label)
     ax.set_xlabel("Fraction of HPU-labeled images")
     ax.set_ylabel("Maximum F-score")
@@ -206,5 +212,13 @@ def HPU_strategy_increasing_lowest_confidence_mix(hpu_boxes, cpu_boxes, fraction
         hpu_boxes,
         cpu_boxes,
         measure = lambda xs: np.min(xs) if len(xs) else 0,
+        fraction=fraction,
+    )
+
+def HPU_strategy_increasing_median_confidence_mix(hpu_boxes, cpu_boxes, fraction):
+    return HPU_strategy_increasing_confidence_mix(
+        hpu_boxes,
+        cpu_boxes,
+        measure = lambda xs: np.median(xs) if len(xs) else 0,
         fraction=fraction,
     )
