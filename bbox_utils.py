@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-import skimage
-from skimage import io
+
 def plot_bounding_box(filename, bbox_list, colorvector):
     """
     Input
@@ -11,6 +10,12 @@ def plot_bounding_box(filename, bbox_list, colorvector):
     Output
         image as np.array of shape (height, width, channels)
     """
+
+    import skimage
+    from skimage import io
+    # mwilber note: moving the imports here, since skimage is a bit
+    # harder to install for students
+
     line_width = 4
     #load image file
     image = skimage.img_as_float(io.imread(filename))

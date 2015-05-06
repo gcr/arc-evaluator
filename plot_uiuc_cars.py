@@ -18,7 +18,8 @@ from bbox_utils import BoundingBox
 
 print "Loading data..."
 
-# Groundtruth data, for Team DenseMatrix
+################################
+# Parse Team DenseMatrix's data
 def gt_to_bbox_densematrix(gt):
     return BoundingBox(
         top = gt['y'],
@@ -70,7 +71,8 @@ with open("StudentData-UIUC-Cars/Team DenseMatrix/Experiment-3.json") as f:
         for record in json
     }
 
-
+################################
+## Parse AnishShah's team's data
 AnishShah_csv = pandas.io.parsers.read_csv("StudentData-UIUC-Cars/Team AnishShah/CPU.csv")
 AnishShah_CPU = {}
 for i,row in AnishShah_csv.loc[1:].iterrows():
@@ -95,8 +97,9 @@ for i,row in AnishShah_csv.loc[1:].iterrows():
                          width = int(row['x2']) - int(row['x1']),
             )])
 
-# I can't use @boom's data yet because it's on the multiscale dataset
+# We can't use @boom's data yet because it's on the multiscale dataset
 
+################################
 ## Load Team Boom's data
 #import re
 #def boom_parse(filename):
@@ -120,6 +123,7 @@ for i,row in AnishShah_csv.loc[1:].iterrows():
 #
 #boom_hpu_9 = boom_parse("StudentData-UIUC-Cars/Team boom/9.txt")
 
+################################
 # Load Team @yash's data
 def parse_team_yash(filename):
     yash_results = {}
@@ -137,6 +141,8 @@ def parse_team_yash(filename):
 yash_cpu = parse_team_yash("StudentData-UIUC-Cars/Team yash/foundLocations_cascade5.txt")
 
 
+################################
+# Actually make plots
 def show_plot():
     print "Generating plots ..."
 
@@ -148,36 +154,37 @@ def show_plot():
         DenseMatrix1_ground_truth, DenseMatrix1_HPU, DenseMatrix1_CPU, evaluation.HPU_strategy_random_mix,
         "Team DenseMatrix, Experiment-1\nRandom mix of HPU+CPU"
     )
+
     # evaluation.make_accuracy_plot(ax,
     #     ground_truth, ground_truth, CPU, evaluation.HPU_strategy_random_mix,
     #     "Team DenseMatrix, Experiment-1\nRandom mix of groundtruth+CPU"
     # )
-    evaluation.make_accuracy_plot(ax,
-        DenseMatrix1_ground_truth, DenseMatrix1_HPU, DenseMatrix1_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
-        "Team DenseMatrix: Experiment-1\nMix of HPU+CPU, by increasing CPU confidence",
-    )
 
     evaluation.make_accuracy_plot(ax,
         DenseMatrix1_ground_truth, DenseMatrix2_HPU, DenseMatrix2_CPU, evaluation.HPU_strategy_random_mix,
         "Team DenseMatrix, Experiment-2\nRandom mix of HPU+CPU"
-    )
-    evaluation.make_accuracy_plot(ax,
-        DenseMatrix1_ground_truth, DenseMatrix2_HPU, DenseMatrix2_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
-        "Team DenseMatrix: Experiment-2\nMix of HPU+CPU, by increasing CPU confidence",
     )
 
     evaluation.make_accuracy_plot(ax,
         DenseMatrix1_ground_truth, DenseMatrix3_HPU, DenseMatrix3_CPU, evaluation.HPU_strategy_random_mix,
         "Team DenseMatrix, Experiment-3\nRandom mix of HPU+CPU"
     )
-    evaluation.make_accuracy_plot(ax,
-        DenseMatrix1_ground_truth, DenseMatrix3_HPU, DenseMatrix3_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
-        "Team DenseMatrix: Experiment-3\nMix of HPU+CPU, by increasing CPU confidence",
-    )
 
     evaluation.make_accuracy_plot(ax,
         DenseMatrix1_ground_truth, AnishShah_HPU, AnishShah_CPU, evaluation.HPU_strategy_random_mix,
         "Team AnishShah\nRandom mix of HPU+CPU"
+    )
+    evaluation.make_accuracy_plot(ax,
+        DenseMatrix1_ground_truth, DenseMatrix1_HPU, DenseMatrix1_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
+        "Team DenseMatrix: Experiment-1\nMix of HPU+CPU, by increasing CPU confidence",
+    )
+    evaluation.make_accuracy_plot(ax,
+        DenseMatrix1_ground_truth, DenseMatrix2_HPU, DenseMatrix2_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
+        "Team DenseMatrix: Experiment-2\nMix of HPU+CPU, by increasing CPU confidence",
+    )
+    evaluation.make_accuracy_plot(ax,
+        DenseMatrix1_ground_truth, DenseMatrix3_HPU, DenseMatrix3_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
+        "Team DenseMatrix: Experiment-3\nMix of HPU+CPU, by increasing CPU confidence",
     )
     evaluation.make_accuracy_plot(ax,
         DenseMatrix1_ground_truth, AnishShah_HPU, DenseMatrix1_CPU, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
@@ -194,7 +201,9 @@ def show_plot():
 
     plt.show()
 
+    return fig,ax
+
 
 
 if __name__ == "__main__":
-    show_plot()
+    fig,ax = show_plot()
