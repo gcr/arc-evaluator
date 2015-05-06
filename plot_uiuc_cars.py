@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-This file generates plots for
+This file generates plots for the "Single-Scale" set of the UIUC Cars dataset.
 """
 
 import os
