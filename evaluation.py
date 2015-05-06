@@ -120,6 +120,7 @@ def make_accuracy_plot(ax,
     HPU_strategy: a function (boxes, boxes, fraction) -> (human_time, boxes),
                   that mixes CPU and HPU boxes together.
     """
+    print "Making plot for", repr(label)
     print "TODO: this should graph seconds per image"
     mix_fractions = np.linspace(0, 1.0, num_graph_points)
     # Plot confidence intervals
