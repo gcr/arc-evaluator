@@ -28,6 +28,22 @@ If you need a quick way to install Python along with these related packages, [En
 
 - Once you have Python working, run `plot_uiuc_cars.py`, which will show the figure on your screen.
 
+To add your bounding boxes to this plot:
+----------------------------------------
+
+To add your bounding boxes, we need the following information for *each* image:
+
+- The image file name
+- A list of bounding boxes for each image, with the coordinates of the *top left corner*, the *width*, and the *height* of the box.
+- If you are using a CPU algorithm, each bounding box should have a *confidence score* that indicates your algorithm's confidence in its detection
+- If you are using an HPU algorithm, each bounding box should include the *time in seconds* that it took to label each box.
+
+For good examples of formatting to imitate, see [StudentData-UIUC-Cars/Example Bounding Box Format.json](StudentData-UIUC-Cars/Example Bounding Box Format.json)
+
+Either **confirm to this JSON format**, or **write code to parse your data**, using the `plot_uiuc_cars.py` file as a reference. This file simply parses teams' data and adds the line to the plot.
+
+You can send this data to us by submitting a pull request, posting it to the Piazza data thread, or by messaging us on slack with a link to your data files.
+
 If you need a team's bounding boxes:
 ------------------------------------
 
@@ -61,19 +77,3 @@ Here is an example which outputs Team DenseMatrix's CPU bounding boxes in a spac
     test-93.png -28 -56 182 70
 
 If you would like to use a team's bounding boxes but can't get the code to work, let us know what team you need and what format you want it in, and we will be happy to send you the file.
-
-To add your bounding boxes to this plot:
-----------------------------------------
-
-To add your bounding boxes, we need the following information for *each* image:
-
-- The image file name
-- A list of bounding boxes for each image, with the coordinates of the *top left corner*, the *width*, and the *height* of the box.
-- If you are using a CPU algorithm, each bounding box should have a *confidence score* that indicates your algorithm's confidence in its detection
-- If you are using an HPU algorithm, each bounding box should include the *time in seconds* that it took to label each box.
-
-For good examples of formatting to imitate, see `StudentData-UIUC-Cars/Example Bounding Box Format.json`.
-
-The `plot_uiuc_cars.py` file parses your data and adds the line to the plot.
-
-You can send this data to us by submitting a pull request, posting it to the Piazza data thread, or by messaging us on slack with a link to the file.
