@@ -13,6 +13,9 @@
 
 \newcommand{\preliminary}[1]{\textcolor{red}{#1}}
 
+\usepackage{color}
+\newcommand{\todo}{\colorbox{yellow}{\fbox{\LARGE{TODO}}}}
+
 % Include other packages here, before hyperref.
 
 % If you comment hyperref and then uncomment it, you should delete
@@ -79,7 +82,7 @@ These are some previously proposed papers on object localization using different
 }
 
 \preliminary{
-TODO: We're going to have to be extremely consistent with how we use our terminology. ``Detection''? ``Localization''? What's the difference? After we decide this (and this section is probably a good place to choose), we should do a Ctrl+F on all instances of both words and change them to match.
+\todo We're going to have to be extremely consistent with how we use our terminology. ``Detection''? ``Localization''? What's the difference? After we decide this (and this section is probably a good place to choose), we should do a Ctrl+F on all instances of both words and change them to match.
 }
 
 
@@ -96,7 +99,7 @@ For our first example, we chose the classic UIUC cars dataset, introduced in~\ci
 
 On this dataset, performance is evaluated using standard precision/recall measures. F-measure and absolute number of false positives is also typically reported. In the single-scale case, the output bounding box is 100$\times$40px, and it counts as a correct detection if the center lies within a certain ellipse of the groundtruth's bounding box center. Since there may be many cars per image; statistics are aggregated over each individual car in the test set, not per image. The original parts-based representation in~\cite{agarwal2002learning} achieves about 77.58\% F-measure.
 
-\preliminary{TODO: What is the state of the art?}
+\preliminary{\todo What is the state of the art?}
 
 
 \subsection{Caltech Pedestrian Detection Benchmark}
@@ -123,42 +126,114 @@ A place to describe
 \end{enumerate}
 }
 
+
+% Contributed by Team BlackHatProcrastinators
+% \preliminary{
+% The presented algorithm is a real time implementation of HPU. In this the window is to be divided into two parts i.e. first part is to surf for the images of the car and the second part is to drag and drop the respective image. CPU algorithm is detecting the points of the parts of the objects like wheels, car window etc.If the detected parts are correct then one can go onto the next image and if not then by placing the points on it’s correct part.
+% The user would be given a threshold time of 9 sec for each image once they have dragged and dropped the image to make any changes. Once the threshold time is reached the drag and drop part of the window will itself clear the image and once again the user can drag the image.
+
+
+% HPU Algorithm
+% This algorithm has been designed for the UIUC dataset, but can work with any dataset in general. We have created 3 versions of our algorithm so far. The algorithm given below is the 3rd version out of all that we created. The other 2 versions, their design process and philosophy may be found in our assignment submission for this week.
+
+% In our algorithm we take 2 strategies to exploit the differences of the real world:
+% Latency factor of Humans (as an indicator for image complexity)
+% Skill level of Humans (for optimal distribution of images)
+
+% Every person takes different amount of time to process different types of images. A simple image will take less time and a complex image will consume more time.
+
+% In our algorithm we take an image to be “complex” if it satisfies one or more of the following:
+% All the desired objects can’t be identified properly.
+% The image takes relatively more computation time.
+
+% We take “performance” as a measure inversely proportional to the time taken by a user.
+% We store just a boolean variable of “smartness” against every user based on their latest performance.
+
+
+% Assumptions:
+% A complex image is more prone to errors than a simple image.
+% Hence based on the complexity of images we shall dynamically vary the number of reviewers for any image.
+% For now let us assume that, images demanding relatively more CPU time, are challenging for humans as well (i.e, it is a complex image). This assumption can be relaxed as soon as we find a proper correlation between the particular CV algorithm (that we are using) and the complexity posed to human classifiers.
+
+% Ultimately we want the CPU to identify which image should be given to a “smart user” and which image can be handled, even by “not so smart users”.
+% This would result in the minimum time requirement, and an optimal utilization of human resources.
+
+% HPU_Version3 :
+% Each image along with the probable bounding boxes (found by the CV algorithms) will be shown to:
+% 3 “smart” people if image is complex, set Time_Threshold = 7sec
+% 3 “not so smart” people for simple images, set Time_Threshold = 10sec
+% 		Start recording the time for every user
+% If all the cars are identified correctly:
+%     i.         Press Yes
+%        b.   If all the cars are NOT identified correctly:
+%      i.        Select ones which are perfect
+%     ii.        Rescale imperfect boxes
+%    iii.        Add new boxes which were missed.
+% (Based on the Person who marks the box a unique edge colour will be given to the bounding box)
+%         2.  If Avg_Time_Spent < Time_Threshold, then show  these images to a set of 5 people.
+% Else, if the Avg_Time_Spent >= Time_Threshold, then the images will be shown to a set
+% of 7 people. They will have to do the following :
+% If there is at least one correct bounding box around every car:
+% Select one bounding box for each car image
+%        b. Else:
+%                                    ii.    Click “Report this Image”
+%       3.  Based on which bounding box was chosen by the maximum people, that particular
+%             box will be marked as the final bounding box for that image.
+%       4.  If there is an image whose majority voting says “Image Reported Wrong”, it will be
+%             resent for processing.
+
+
+
+% Cost
+% We propose to take time as a unit to measure cost. We will also attach different weights to different actions (performed by the user), such as Clicking Yes/No, Resizing Bounding boxes, Creating new Bounding boxes etc.
+
+% Using statistical analysis, we can find out the closest ideal time for a particular task. eg. Median of the times might be one good measure.
+
+% Weights can be assigned as a function of the different tasks performed :
+% W1 (lowest weight) - Clicking Yes/No for the correctness of bounding boxes
+% W2  (medium weight) - Resizing bounding boxes for better accuracy
+% W3  (highest weight) - Creating new bounding boxes in place of the old ones
+
+% This would take into account the complexity factor for any type of task.
+
+% Therefore, Cost = Weight of a given task * Time taken by user to do the task
+
+
+% HPU Integration:
+% We present a novel approach for HPU integration in this project. The Human skill and intelligence to find objects in cluttered environment could be used as a feedback for the trained localization algorithm. Eg. a trained localizer will predict the object location in an image. Then the same image will be presented before HPU for marking ROI. Percentage overlap will be calculated and the data will be feed back the to algorithm. Just as BackPropagation algorithm works in a Neural Network, we propose this feedback method to improve the accuracy of the localizer.
+% Cost:
+% Cost will be calculated as the time required by the HPU to mark the bounding box around the ROI in the image.
+
+% Cost-effective HPU
+% The HPU we have implemented aims on reducing the number of tasks sent out to the human workers. Instead of passing an image large number of times to converge to a highly-likely label, we pass the image individually lesser number of times to get an initial guess. Once, an initial guess is obtained we cluster similarly marked images and send a cluster to a worker (in a single HPU task). All that the worker needs to do is mark the one which is falsely classified thus also implicitly verifying correctness of others in the cluster.
+
+% For example, in case of the UIUC data set the HPU can find the odd one out by checking if there is an empty/non-car bounding box. This can have couple of advantages over other HPU methods being implemented. With few initial passes of asking worker to draw correct bounding boxes we can ensure that we get the marking for the false negatives. Subsequent passes can be made via our proposed approach. This will help in pruning false positives and confirming true positives in a single pass. Thus, reducing number of HPU tasks.
+% }
+
+
 \subsection{UIUC Cars}
-% mjw note: here's just one example on how to include this kind of plot. Perhaps we should do this in excel instead? I'm open to anything, but keeping points+lines right in this document means we will never have to worry about keeping our plots in sync.
 \begin{figure}[t]
-\begin{tikzpicture}
-\begin{axis}[
-    small, % changes font size, etc
-    legend style={font=\footnotesize},
-    width=\linewidth,
-    height=0.5\linewidth,
-    xlabel={\preliminary{Human annotation cost (dollars)}},
-    ylabel={\preliminary{F-measure}},
-    grid=major,
-    legend pos={south east},
-]
-
-% Example of HPU line (DUMMY; REMOVE THIS
-\addplot coordinates {
-    (0, 0.57)
-    (0.2, 0.72)
-    (0.5, 0.86)
-    (0.75, 0.9)
-};
-\addlegendentry{Dummy HPU}
-
-% Example of a dummy CPU point
-\addplot coordinates { (0, 0.76) };
-\addlegendentry{Dummy CPU 1}
-\addplot coordinates { (0, 0.66) };
-\addlegendentry{Dummy CPU 2}
-\end{axis}
-\end{tikzpicture}
-\caption{A graph showing how using crowdsourcing to adjust localization errors can improve accuracy. \preliminary{F-measure} is shown on the Y-axis and \preliminary{dollars} is shown on the X-axis. See Sec.~\ref{sec:uiuc-cars} for details.}
+  \includegraphics[width=1\linewidth]{figure-UIUC-Cars-acc-vs-fraction.pdf}
 \end{figure}
 
+\todo Team DenseMatrix: What is the difference between HPU Experiments 1, 2, 3? Please describe exactly what the task was, whether you started from CPU or HPU bounding boxes, etc.
+
+\todo Team AnishShah, Yash's team: Please include confidence values for each bounding box in your CPU results. That way, we can ask the human worker to label the least-confident images first, which will help quickly improve performance
+
+\todo Team DenseMatrix: Thanks for including confidence values, but they are taken from the set $\{1, 2\}$. Is there any way to get confidence more fine-grained?
+
 \subsection{Caltech Pedestrians}
+\begin{figure}[t]
+  \includegraphics[width=1\linewidth]{figure-Pedestrians-acc-vs-fraction.pdf}
+\end{figure}
+
+\todo Team Vision93: Thanks for including bounding boxes, but we note that the groundtruth has 4,024 images and your CPU results list bounding boxes for 1,400 images. Is this intentional? This would mean that the CPU algorithm starts at $\approx$ 30\% recall.
+
+\todo All teams: Does anyone have bounding boxes for Caltech?
+
+
 \subsection{Street view house numbers}
+\todo All teams: It looks like we may have to come up with our own strategy to evaluate SVHN.
 
 
 \section{Applications}
