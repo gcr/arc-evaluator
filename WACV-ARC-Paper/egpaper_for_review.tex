@@ -61,25 +61,34 @@ First line of institution2 address\\
 
 %%%%%%%%% BODY TEXT
 \section{Introduction}
+\todo
 
-\section{Localization}
+\section{Background}
 \preliminary{
-A place to describe
+\todo A place to describe
 \begin{enumerate}
-\item definition of what we understand it is
-\item Where localization fits into a typical classification pipeline, which helps us motivate why we chose to focus on this problem in particular
-\item state of the art
-\item data sets
-\item applications
+\item definition of what we understand ``localization'' is
+  \begin{enumerate}
+    \item Where localization fits into a typical classification pipeline, which helps us motivate why we chose to focus on this problem in particular
+    \item The difference between localization, semantic segmentation, object detection, classification, ...
+    \item State of the art
+    \item data sets
+    \item applications
+\end{enumerate}
+\item Crowd work:
+\begin{enumerate}
+  \item What kinds of tasks humans are good at and are not good at?
+  \item previous work on this area (the bubble game, Fei-Fei's bounding boxes, etc!)
+\end{enumerate}
 \end{enumerate}
 }
 
 % Contributed by students:
-\preliminary {
-Object localization is one of the most obvious parts of any computer vision application. It involves two basic tasks namely semantic segmentation and object detection. Semantic segmentation is the task of labelling the pixels of an image depending on their semantic category while object detection produces a rough location (bounding boxes) of all the instances that belong to a set of objects of interest. Our research focuses more on object detection. Object detection allows us to count the number of objects precisely, which is not always possible from semantic segmentation.
-Where does localization fit into a typical classification pipeline? This helps us motivate why we chose to focus on the problem of localization in particular( to be done)
-These are some previously proposed papers on object localization using different techniques~\cite{localization01,localization02}. Although these papers provide various impressive techniques, we through our paper would like to improve upon the accuracy of the localization algorithm by incorporating HPU component with it.
-}
+% \preliminary {
+% Object localization is one of the most obvious parts of any computer vision application. It involves two basic tasks namely semantic segmentation and object detection. Semantic segmentation is the task of labelling the pixels of an image depending on their semantic category while object detection produces a rough location (bounding boxes) of all the instances that belong to a set of objects of interest. Our research focuses more on object detection. Object detection allows us to count the number of objects precisely, which is not always possible from semantic segmentation.
+% Where does localization fit into a typical classification pipeline? This helps us motivate why we chose to focus on the problem of localization in particular( to be done)
+% These are some previously proposed papers on object localization using different techniques~\cite{localization01,localization02}. Although these papers provide various impressive techniques, we through our paper would like to improve upon the accuracy of the localization algorithm by incorporating HPU component with it.
+% }
 
 \preliminary{
 \todo We're going to have to be extremely consistent with how we use our terminology. ``Detection''? ``Localization''? What's the difference? After we decide this (and this section is probably a good place to choose), we should do a Ctrl+F on all instances of both words and change them to match.
@@ -89,8 +98,8 @@ These are some previously proposed papers on object localization using different
 \section{Data Sets}
 \preliminary{
 \begin{enumerate}
-\item in detail the picked data sets (refer to previous section why they are important.)
-\item the measure of accuracy on those data sets
+\item Describe in detail the picked data sets (refer to previous section why they are important.)
+\item Describe the measure of accuracy on those data sets
 \end{enumerate}
 }
 
@@ -100,7 +109,6 @@ For our first example, we chose the classic UIUC cars dataset, introduced in~\ci
 On this dataset, performance is evaluated using standard precision/recall measures. F-measure and absolute number of false positives is also typically reported. In the single-scale case, the output bounding box is 100$\times$40px, and it counts as a correct detection if the center lies within a certain ellipse of the groundtruth's bounding box center. Since there may be many cars per image; statistics are aggregated over each individual car in the test set, not per image. The original parts-based representation in~\cite{agarwal2002learning} achieves about 77.58\% F-measure.
 
 \preliminary{\todo What is the state of the art?}
-
 
 \subsection{Caltech Pedestrian Detection Benchmark}
 The Caltech Pedestrian Detection Benchmark, introduced by~\cite{dollarCVPR09peds}, is a challenging pedestrian detection dataset. This set is several orders of magnitude larger than the UIUC~Cars set, containing 350,000 groundtruth pedestrian bounding boxes. The research that uses this dataset is summarized by~\cite{Dollar2012PAMI}.
@@ -118,16 +126,26 @@ A detection counts as correct if its intersection-over-union score is greater th
 
 \section{Computer-Human Localization}
 \preliminary{
-A place to describe
-\begin{enumerate}
-\item Our different HCOMP algorithms
-\item Examples
-\item Evaluations (the famous plots we always talk about)
-\end{enumerate}
+A place to briefly describe our different HCOMP algorithms
 }
 
+\subsection{Removing false positives}
+\todo \preliminary{ Describing HPU algorithms that work by removing bounding boxes that were incorrectly detected }
 
-% Contributed by Team BlackHatProcrastinators
+\subsection{Removing true positives}
+\todo \preliminary{ Describing HPU algorithms that work by asking the human to add boxes that were never found }
+
+\subsection{Using crowds to adjust detection thresholds (@Chinmaya and teammates)}
+\todo
+
+\subsection{CCA clustering (Team LiteVision)}
+\todo
+
+\subsection{How much stimulus is necessary? (@boom and teammates)}
+\todo
+
+\subsection{Real-time HPU implementations (Team BlackHatProcrastinators)}
+\todo (see commented-out progress)
 % \preliminary{
 % The presented algorithm is a real time implementation of HPU. In this the window is to be divided into two parts i.e. first part is to surf for the images of the car and the second part is to drag and drop the respective image. CPU algorithm is detecting the points of the parts of the objects like wheels, car window etc.If the detected parts are correct then one can go onto the next image and if not then by placing the points on it’s correct part.
 % The user would be given a threshold time of 9 sec for each image once they have dragged and dropped the image to make any changes. Once the threshold time is reached the drag and drop part of the window will itself clear the image and once again the user can drag the image.
@@ -210,6 +228,13 @@ A place to describe
 % For example, in case of the UIUC data set the HPU can find the odd one out by checking if there is an empty/non-car bounding box. This can have couple of advantages over other HPU methods being implemented. With few initial passes of asking worker to draw correct bounding boxes we can ensure that we get the marking for the false negatives. Subsequent passes can be made via our proposed approach. This will help in pruning false positives and confirming true positives in a single pass. Thus, reducing number of HPU tasks.
 % }
 
+\subsection{(Others ...)}
+\todo
+
+
+
+\section{Experiments}
+\preliminary{A place for experiments and results}
 
 \subsection{UIUC Cars}
 \begin{figure}[t]
@@ -233,17 +258,17 @@ A place to describe
 
 
 \subsection{Street view house numbers}
-\todo All teams: It looks like we may have to come up with our own strategy to evaluate SVHN.
+\todo Everyone: It looks like we may have to come up with our own strategy to evaluate SVHN.
 
 
-\section{Applications}
-\preliminary{
-A place to describe
-\begin{enumerate}
-\item Now that we've shown that we can improve accuracy, what other applications can we enable?
-\item Graph that shows, human labour cost vs, profit of company/test... (the graph is generated by intersecting(or whatever maximization is needed between cost/accuracy and value/accuracy)
-\end{enumerate}
-}
+% \section{Applications}
+% \preliminary{
+% A place to describe
+% \begin{enumerate}
+% \item Now that we've shown that we can improve accuracy, what other applications can we enable?
+% \item Graph that shows, human labour cost vs, profit of company/test... (the graph is generated by intersecting(or whatever maximization is needed between cost/accuracy and value/accuracy)
+% \end{enumerate}
+% }
 
 \section{Conclusion}
 
