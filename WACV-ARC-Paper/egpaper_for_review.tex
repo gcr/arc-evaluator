@@ -129,7 +129,7 @@ A detection counts as correct if its intersection-over-union score is greater th
 A place to briefly describe our different HCOMP algorithms
 }
 
-\subsection{Removing false positives}
+\subsection{Removing false positives (Ankhit Dhall and teammates, and others)}
 \todo \preliminary{ Describing HPU algorithms that work by removing bounding boxes that were incorrectly detected }
 
 \subsection{Removing true positives}
@@ -146,6 +146,13 @@ A place to briefly describe our different HCOMP algorithms
 
 \subsection{Real-time HPU implementations (Team BlackHatProcrastinators)}
 \todo (see commented-out progress)
+
+\subsection{Reordering images based on confidence}
+\todo
+
+\subsection{Present multiple images together}
+\todo
+
 % \preliminary{
 % The presented algorithm is a real time implementation of HPU. In this the window is to be divided into two parts i.e. first part is to surf for the images of the car and the second part is to drag and drop the respective image. CPU algorithm is detecting the points of the parts of the objects like wheels, car window etc.If the detected parts are correct then one can go onto the next image and if not then by placing the points on it’s correct part.
 % The user would be given a threshold time of 9 sec for each image once they have dragged and dropped the image to make any changes. Once the threshold time is reached the drag and drop part of the window will itself clear the image and once again the user can drag the image.
@@ -255,7 +262,6 @@ A place to briefly describe our different HCOMP algorithms
 \todo Team Vision93: Thanks for including bounding boxes, but we note that the groundtruth has 4,024 images and your CPU results list bounding boxes for 1,400 images. Is this intentional? This would mean that the CPU algorithm starts at $\approx$ 30\% recall.
 
 \todo All teams: Does anyone have bounding boxes for Caltech?
-
 
 \subsection{Street view house numbers}
 \todo Everyone: It looks like we may have to come up with our own strategy to evaluate SVHN.
