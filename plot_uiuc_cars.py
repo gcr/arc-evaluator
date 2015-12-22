@@ -140,6 +140,35 @@ def parse_team_yash(filename):
 
 yash_cpu = parse_team_yash("StudentData-UIUC-Cars/Team yash/foundLocations_cascade5.txt")
 
+def parse_team_yash_alternate(filename):
+    yash_results = {}
+    for line in open(filename).readlines():
+        idx = int(line.split(": ")[0])
+        rest_objs = [int(val) for val in line.split(": ")[1].split(" ")]
+        key = "test-%d.png" % idx
+        n_bbox = rest_objs.pop(0)
+        #print idx, n_bbox, rest_objs
+        for i in xrange(n_bbox):
+            top_y = rest_objs.pop(0)
+            top_x = rest_objs.pop(0)
+            width = rest_objs.pop(0)
+            height = rest_objs.pop(0)
+            if len(rest_objs):
+                confidence = rest_objs.pop(0)
+            else:
+                print "Warning: no confidence for", idx
+                confidence = 0
+            yash_results[key] = yash_results.get(key, []) + (
+                [BoundingBox(top = top_y,
+                             left = top_x,
+                             width = width,
+                             height = height,
+                             confidence = confidence
+                             )])
+    return yash_results
+
+yash_cpu_alt = parse_team_yash_alternate("StudentData-UIUC-Cars/Team yash/foundLocations_conf.txt")
+
 
 ################################
 # Actually make plots
@@ -194,6 +223,10 @@ def show_plot():
     evaluation.make_accuracy_plot(ax,
         DenseMatrix1_ground_truth, AnishShah_HPU, yash_cpu, evaluation.HPU_strategy_random_mix,
         "Mix Yash-CPU with AnishShah-HPU"
+    )
+    evaluation.make_accuracy_plot(ax,
+        DenseMatrix1_ground_truth, AnishShah_HPU, yash_cpu_alt, evaluation.HPU_strategy_increasing_lowest_confidence_mix,
+        "Yash Alt + AnishShah-HPU increasing confidence"
     )
 
     ax.set_title("HPU+CPU Hybrid Accuracy")
